@@ -38122,8 +38122,8 @@ const addPhoto = async () => {
       setTimeout(function(){
         document.getElementById("alert").style.display = "none";
       }, 5000);
-      const href = "https://s3.us-west-2.amazonaws.com/";
-      const url = href + uploadBucketName + "/"+fileName;
+      const href = "https://s3.us-west-2.amazonaws.com/group12projectoutput/";
+      const url = href +fileName+ ".png";
       document.getElementById("url").value = url;
       document.getElementById("url").style.display = "block";
     } catch (err) {
@@ -38164,31 +38164,10 @@ const viewAlbum = async () => {
         //console.log(photo.Key);
         const photoUrl = bucketUrl + encodeURIComponent(photoKey);
         return getHtml([
-          "<div class='col-md-4 mt-3 col-lg-3'>",
-          "<img src=\""+photoUrl+"\" class=\"img-fluid\" alt=\"image\" onclick=\"showModal(this);\">",
-          "</div>"
+            "<img src=\""+photoUrl+"\" class=\"w-25 shadow-1-strong rounded mx-auto\" alt=\"image\" onclick=\"showModal(this);\" />"
         ]);
       });
 
-      // var message = photos.length
-      //     ? "<p>Click the X to delete the photo.</p>"
-      //     : "<p>You don't have any photos in this album. You need to add photos.</p>";
-      // const htmlTemplate = [
-      //   "<h2>",
-      //   "Album",
-      //   "</h2>",
-      //   message,
-      //   "<div>",
-      //   getHtml(photos),
-      //   "</div>",
-      //   '<input id="photoupload" type="file" accept="image/*">',
-      //   '<button id="addphoto" onclick="addPhoto(\'' + "" + "')\">",
-      //   "Add photo",
-      //   "</button>",
-      //   '<button onclick="listAlbums()">',
-      //   "Back to albums",
-      //   "</button>",
-      // ];
       document.getElementById("album").innerHTML = photos;
       //document.getElementsByTagName("img")[0].remove();
     }
@@ -38199,7 +38178,7 @@ const viewAlbum = async () => {
   // Make viewAlbum function available to the browser
 window.viewAlbum = viewAlbum;
 viewAlbum();
-window.setInterval(viewAlbum, 10000);
+window.albumInterval = window.setInterval(viewAlbum, 10000);
 window.showModal = function(img){
   console.log("showing....", img.src);
   // Get the modal
@@ -38213,6 +38192,19 @@ window.showModal = function(img){
     modal.style.display = "none";
   }
 }
+
+
+window.previewImage = function() {
+  console.log("img changed!!");
+  var oFReader = new FileReader();
+  oFReader.readAsDataURL(document.getElementById("photoupload").files[0]);
+
+  oFReader.onload = function (oFREvent) {
+    console.log("setting ig");
+      document.getElementById("uploadPreview").src = oFREvent.target.result;
+      document.getElementById("uploadPreview").style.display = "block";
+  };
+};
 })();
 
 /******/ })()
