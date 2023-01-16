@@ -38094,47 +38094,35 @@ function getHtml(template) {
 // Make getHTML function available to the browser
 window.getHTML = getHtml;
 const uploadBucketName = "group12projectupload";
+
 const addPhoto = async () => {
   // console.log("event triggered!");
   const files = document.getElementById("photoupload").files;
   // console.log(files);
   try {
-    const albumPhotosKey = "";
-    await s3.send(
-        new ListObjectsCommand({
-          Prefix: albumPhotosKey,
-          Bucket: uploadBucketName
-        })
-    );
-    try {
-      const file = files[0];
-      const fileName = shortid.generate();//file.name;
-      const photoKey = fileName;
-      const watermark = document.getElementById("inputWatermark").value || "CS4990";
-      const uploadParams = {
-        Bucket: uploadBucketName,
-        Key: photoKey,
-        Body: file,
-        Metadata: {"x-amz-meta-watermark": watermark}
-      };
-      await s3.send(new PutObjectCommand(uploadParams));
-      document.getElementById("alert").style.display = "block";
-      setTimeout(function(){
-        document.getElementById("alert").style.display = "none";
-      }, 5000);
-      const href = "https://s3.us-west-2.amazonaws.com/group12projectoutput/";
-      const url = href +fileName+ ".png";
-      document.getElementById("url").value = url;
-      document.getElementById("url").style.display = "block";
-    } catch (err) {
-      console.log(err);
-      return alert("There was an error uploading your photo: ", err.message);
-    }
+    const file = files[0];
+    const fileName = shortid.generate();//file.name;
+    const photoKey = fileName;
+    const watermark = document.getElementById("inputWatermark").value || "CS4990";
+    const email = document.getElementById("inputEmail").value || "smallena@cpp.edu";
+    const uploadParams = {
+      Bucket: uploadBucketName,
+      Key: photoKey,
+      Body: file,
+      Metadata: {"x-amz-meta-watermark": watermark, "x-amz-meta-email": email}
+    };
+    await s3.send(new PutObjectCommand(uploadParams));
+    document.getElementById("alert").style.display = "block";
+    setTimeout(function(){
+      document.getElementById("alert").style.display = "none";
+    }, 5000);
+    // const href = "https://s3.us-west-2.amazonaws.com/group12projectoutput/";
+    // const url = href +fileName+ ".png";
+    // document.getElementById("url").value = url;
+    // document.getElementById("url").style.display = "block";
   } catch (err) {
-    console.log("error!!",err);
-    if (!files.length) {
-      return alert("Choose a file to upload first.");
-    }
+    console.log(err);
+    return alert("There was an error uploading your photo: ", err.message);
   }
 };
   // Make addPhoto function available to the browser
@@ -38205,6 +38193,37 @@ window.previewImage = function() {
       document.getElementById("uploadPreview").style.display = "block";
   };
 };
+
+
+window.createProgressbar = function(id, duration, callback) {
+  // We select the div that we want to turn into a progressbar
+  var progressbar = document.getElementById(id);
+  console.log("progressbar",id, progressbar);
+  progressbar.className = 'progressbar';
+
+  // We create the div that changes width to show progress
+  var progressbarinner = document.createElement('div');
+  progressbarinner.className = 'inner';
+
+  // Now we set the animation parameters
+  progressbarinner.style.animationDuration = duration;
+
+  // Eventually couple a callback
+  if (typeof(callback) === 'function') {
+    progressbarinner.addEventListener('animationend', callback);
+  }
+
+  // Append the progressbar to the main progressbardiv
+  progressbar.appendChild(progressbarinner);
+
+  // When everything is set up we start the animation
+  progressbarinner.style.animationPlayState = 'running';
+}
+document.addEventListener('DOMContentLoaded', function () {
+  createProgressbar('progressbar1', '10s');
+});
+
+
 })();
 
 /******/ })()

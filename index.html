@@ -12,6 +12,35 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <style>
+    .progressbar {
+  width: 50%;
+  margin: 25px auto;
+  border: solid 0px #000;
+}
+.progressbar .inner {
+  height: 5px;
+  animation: progressbar-countdown;
+  /* Placeholder, this will be updated using javascript */
+  animation-duration: 10s;
+  /* We stop in the end */
+  animation-iteration-count: infinite;
+  /* Stay on pause when the animation is finished finished */
+  animation-fill-mode: forwards;
+  /* We start paused, we start the animation using javascript */
+  animation-play-state: paused;
+  /* We want a linear animation, ease-out is standard */
+  animation-timing-function: linear;
+}
+@keyframes progressbar-countdown {
+  0% {
+    width: 100%;
+    background: #0F0;
+  }
+  100% {
+    width: 0%;
+    background: #0F0;
+  }
+}
     #myImg {
   border-radius: 5px;
   cursor: pointer;
@@ -107,6 +136,10 @@ text-decoration: none;
                         <label for="inputWatermark" class="form-label">Enter Watermark Text:</label>
                         <input type="text" class="form-control" id="inputWatermark" placeholder="CS4990">
                       </div>
+                      <div class="mb-3">
+                        <label for="inputEmail" class="form-label">Enter Notification Email Address:</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="smallena@cpp.edu" value="smallena@cpp.edu">
+                      </div>
                     <div class="text-center">
                         <button class="btn btn-lg btn-primary" id="btnUpload" onclick="addPhoto();">Upload</button>
                         <div class="alert alert-success" role="alert" id="alert" style="display: none; margin-top: 20px;">Upload Complete!</div>
@@ -119,9 +152,10 @@ text-decoration: none;
                 <div class="col-8 offset-2">
                     <input id="url" class="form-control mt-4" style="display: none;" type="text" value="" aria-label="readonly input example" readonly />
                 </div>
-                <div class="row">
-                    <div class="offset-lg-2 col-lg-11 mt-5" id="album"></div>
-                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-11"><div id='progressbar1'></div></div>
+                <div class="offset-lg-2 col-lg-11 mt-5" id="album"></div>
             </div>
             
         </main>
